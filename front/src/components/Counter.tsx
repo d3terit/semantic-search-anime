@@ -25,7 +25,7 @@ export default function Counter({
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ query: 'hello' }),
+			body: JSON.stringify({ query: 'Joven en una aldea' }),
 		})
 			.then((response) => response.json())
 			.then((data) => {
