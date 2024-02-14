@@ -1,9 +1,11 @@
 import { useState } from "react";
 import './Home.css';
 
+const page_url = 'https://www3.animeflv.net/'
 const url = 'http://127.0.0.1:5000/semantic-search'
 
 const Home = () => {
+    const [animes, setAnimes] = useState<any[]>([]);
     const [currentAnime, setCurrentAnime] = useState<string | null>(null);
     const [query, setQuery] = useState<{ match_threshold: number, match_count: number}>({ match_threshold: 50, match_count: 5});
     const handleChange = (e: any) => {
@@ -24,9 +26,7 @@ const Home = () => {
             body: JSON.stringify(data),
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-            })
+            .then((data) => setAnimes(data))
             .catch((error) => {
                 console.error('Error:', error);
             });
@@ -35,9 +35,9 @@ const Home = () => {
         <section className="home">
             <article className="card-search">
                 <header>
-                    <h1>Embeddings en la búsqueda de <span style={{color: "#3ecf8e"}}>animes.</span></h1>
+                    <h1><span style={{color: "#3ecf8e"}}>[Embeddings]</span> en la búsqueda de <span style={{color: "#db6c08"}}>animes.</span></h1>
                     <section>
-                        <a style={{background: "#db6c08"}} href="https://www3.animeflv.net/" target="_blank">Animeflv</a>
+                        <a style={{background: "#db6c08"}} href={page_url} target="_blank">Animeflv</a>
                         <a style={{background: "#37996b"}} href="https://supabase.com/" target="_blank">Supabase</a>
                     </section>
                 </header>
@@ -49,11 +49,29 @@ const Home = () => {
                     </span>
                     <span>
                         <label htmlFor="match_count">Resultados</label>
-                        <input type="number" max={12} min={1} onChange={handleChange} id="match_count" value={query.match_count} />
+                        <input type="number" max={100} min={1} onChange={handleChange} id="match_count" value={query.match_count} />
                     </span>
                     <button onClick={handleSubmit}>Buscar</button>
                 </footer>
             </article>
+            {!!animes.length &&
+                <article className="card-results">
+                    <header>
+                        <h1>Resultados</h1>
+                    </header>
+                    <section>
+                        {animes.map((anime, index) => (
+                            <div key={index} className="card-anime" onClick={() => setCurrentAnime(anime.title)}>
+                                <span className="similarity">{(anime.similarity*100).toFixed(1)}%</span>
+                                <img src={page_url + anime.cover} alt={anime.title} />
+                                <h2>{anime.title}</h2>
+                                <p>{anime.description}</p>
+                                <a href={page_url + "anime/" + anime.url} target="_blank">Ver anime</a>
+                            </div>
+                        ))}
+                    </section>
+                </article>
+            }
         </section>
     )
 }
