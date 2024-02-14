@@ -71,6 +71,14 @@ def get_anime_info(anime_id):
         return None
 
 def get_new_animes_to(last_register):
-    new_anime_ids = get_anime_ids_to(last_register)
-    new_animes = [get_anime_info(anime_id) for anime_id in new_anime_ids]
-    return new_animes[::-1]
+    try:
+        new_anime_ids = get_anime_ids_to(last_register)
+        new_animes = []
+        for anime_id in new_anime_ids:
+            anime_info = get_anime_info(anime_id)
+            if anime_info:
+                new_animes.append(anime_info)
+        return new_animes[::-1]
+    except Exception as e:
+        print(e)
+        return []

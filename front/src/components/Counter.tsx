@@ -25,7 +25,7 @@ export default function Counter({
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ query: 'Joven en una aldea' }),
+			body: JSON.stringify({ query: 'armas blindadas con forma humanoide conocidas como "Titatonostrider"' }),
 		})
 			.then((response) => response.json())
 			.then((data) => {
