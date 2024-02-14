@@ -18,7 +18,7 @@ def get_anime_register():
 
 def get_anime_ids_page(page_num, num_pages, last_register):
     url = f"{BASE_URL}/browse?order=added&page={page_num}"
-    print(f"Obteniendo ids de animes de la página {page_num} de {num_pages}")
+    print(f"{page_num}/{num_pages}", end="\r")
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -39,6 +39,7 @@ def get_anime_ids_to(last_register):
     soup = BeautifulSoup(content, 'html.parser')
     num_pages = int(soup.select('ul.pagination > li > a')[-2].text)
     print(f"Se obtuvieron {num_pages} páginas de animes")
+    print(f"Obteniendo ids de animes desde {last_register}")
     anime_ids = get_anime_ids_page(1, num_pages, last_register)
     print(f"Se obtuvieron {len(anime_ids)} animes nuevos")
     return anime_ids
@@ -49,7 +50,6 @@ def get_anime_info(anime_id):
         response = requests.get(url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
-            print(f"Obteniendo información del anime {anime_id}")
             return {
                 "url": anime_id,
                 "type": soup.select('span.Type')[0].text,
@@ -69,16 +69,3 @@ def get_anime_info(anime_id):
     except Exception as e:
         print(e)
         return None
-
-def get_new_animes_to(last_register):
-    try:
-        new_anime_ids = get_anime_ids_to(last_register)
-        new_animes = []
-        for anime_id in new_anime_ids:
-            anime_info = get_anime_info(anime_id)
-            if anime_info:
-                new_animes.append(anime_info)
-        return new_animes[::-1]
-    except Exception as e:
-        print(e)
-        return []

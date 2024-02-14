@@ -11,8 +11,7 @@ def welcome():
 def search():
     try:
         data = request.get_json()
-        query = data['query']
-        result = semantic_search(query)
+        result = semantic_search(data)
         response = jsonify(result)
         response.status_code = 200
         return response

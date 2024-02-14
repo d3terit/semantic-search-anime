@@ -16,5 +16,5 @@ def get_last_anime_registered():
     else:
         return None
 
-def search_animes(query_embedding):
-    return supabase.rpc('match_animes', {"query_embedding": query_embedding, "match_threshold": 0.2, "match_count": 3}).execute().data
+def search_animes(query_embedding, match_threshold=0.2, match_count=3):
+    return supabase.rpc('match_animes', {"query_embedding": query_embedding, "match_threshold": match_threshold, "match_count": match_count}).execute().data
